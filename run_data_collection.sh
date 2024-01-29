@@ -19,6 +19,10 @@ cleanup_and_exit() {
 # Trap SIGINT and call cleanup_and_exit function
 trap 'cleanup_and_exit' SIGINT
 
+# Sourcing ros
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+
 # Run lidar data collection node in background and capture pid
 ros2 launch capstone_sw sllidar_a1_launch.py &
 background_pids+=("$!")
@@ -27,11 +31,11 @@ background_pids+=("$!")
 current_date=$(date '+%Y%m%d%H%M%S')
 
 # Run ros2 bag to store published lidar data in background and capture pid
-ros2 bag record -o "lidar_data/$current_date" /raw_lidar &
+ros2 bag record -o "/home/joshua/data_collection/lidar_data/$current_date" /raw_lidar &
 background_pids+=("$!")
 
 # Run script to store images in background and capture pid
-/home/joshua/ros2_ws/src/capstone-data-recording/image_collection.sh "$current_date" &
+/home/joshua/ros2_ws/src/capstone-data-recording/image_collection.sh "/home/joshua/data_collection/image_data/$current_date" &
 background_pids+=("$!")
 
 # Wait for all background processes to finish or be interrupted

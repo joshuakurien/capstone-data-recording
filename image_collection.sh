@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the output directory
-output_directory="image_data/$1"
+output_directory="$1"
 
 # Set the frames per second (fps) equivalent to the lidar hz
 fps=10
