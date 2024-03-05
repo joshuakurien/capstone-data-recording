@@ -24,18 +24,14 @@ source /opt/ros/humble/setup.bash
 source ~/ros2_ws/install/setup.bash
 
 # Run lidar data collection node in background and capture pid
-ros2 launch capstone_sw sllidar_a1_launch.py &
+ros2 launch capstone_sw data_collection_launch.py &
 background_pids+=("$!")
 
 # Date used as a UID in some way
 current_date=$(date '+%Y%m%d%H%M%S')
 
 # Run ros2 bag to store published lidar data in background and capture pid
-ros2 bag record -o "/home/joshua/data_collection/lidar_data/$current_date" /raw_lidar &
-background_pids+=("$!")
-
-# Run script to store images in background and capture pid
-/home/joshua/ros2_ws/src/capstone-data-recording/image_collection.sh "/home/joshua/data_collection/image_data/$current_date" &
+ros2 bag record -o "/home/joshua/data_collection/combined_data/$current_date" /raw_lidar /raw_camera &
 background_pids+=("$!")
 
 # Wait for all background processes to finish or be interrupted
